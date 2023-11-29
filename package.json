@@ -13,13 +13,17 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
   "main": "./extension.js",
+  "activationEvents": [
+    "onCommand:extension.generateLitElement"
+  ],
   "contributes": {
-    "commands": [{
-      "command": "litelem.helloWorld",
-      "title": "Hello World"
-    }]
+    "commands": [
+      {
+        "command": "extension.generateLitElement",
+        "title": "Generate Lit Element"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",

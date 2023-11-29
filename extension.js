@@ -28,29 +28,35 @@ function activate(context) {
       const fileNameWithoutExtension = vscode.window.activeTextEditor.document.fileName.replace(/^.*[\\\/]/, '').replace(/\.[^/.]+$/, '');
 
       // Generated Lit element code with dynamic class name
-      const litElementCode = `
-        import { LitElement, html, css } from 'lit';
+      const litElementCode = `import { LitElement, html, css } from 'lit';
 
-        class ${capitalizeFirstLetter(fileNameWithoutExtension)} extends LitElement {
-          static styles = css\`
-            /* Add your styles here */
-          \`;
+class ${capitalizeFirstLetter(fileNameWithoutExtension)} extends LitElement {
 
-          render() {
-            return html\`
-              <!-- Your content here -->
-            \`;
-          }
-        }
+    static styles = css\`
+      /* Add your styles here */
+    \`;
 
-        customElements.define('${toKebabCase(fileNameWithoutExtension)}', ${capitalizeFirstLetter(fileNameWithoutExtension)});
-      `;
+    render() {
+        return html\`
+          /* Your content here */
+        \`;
+    }
+}
+
+customElements.define('${toKebabCase(fileNameWithoutExtension)}', ${capitalizeFirstLetter(fileNameWithoutExtension)});`;
+
+      // Remove leading tabs or spaces from the first and second lines
+      const trimmedLitElementCode = litElementCode.replace(/^(?:\t| {2})/gm, '');
 
       // Insert the code into the editor
       editor.edit(editBuilder => {
         const currentPosition = editor.selection.active;
-        editBuilder.insert(currentPosition, litElementCode);
+        editBuilder.insert(currentPosition, trimmedLitElementCode);
       });
+
+      // Move the cursor to the beginning of the document
+      const newPosition = new vscode.Position(0, 0);
+      editor.selection = new vscode.Selection(newPosition, newPosition);
     }
   });
 
